@@ -303,6 +303,8 @@ def parse_events(stderr, dry_run=False, warn_function=None):
                 warn_missing_dry_run_prefix = True
         event = _extract_event(line)
         if event is not None:
+            # Remove existing events for the same resource
+            events = [e for e in events if e.resource_id != event.resource_id]
             events.append(event)
             if event.status in DOCKER_STATUS_ERROR:
                 error_event = event
